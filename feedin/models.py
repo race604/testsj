@@ -10,6 +10,8 @@ class Tag(models.Model):
 		return self.tag
 
 class Commodity(models.Model):
+	# 商品连接
+	url = models.CharField(max_length=255)
 	# 商品标题
 	title = models.CharField(max_length=255)
 	# 原价
@@ -24,6 +26,8 @@ class Commodity(models.Model):
 	appraisal = models.IntegerField(default=0)
 
 	tags = models.ManyToManyField(Tag)
+	
+	create_at = models.DateTimeField(auto_now_add=True)
 
 	def __unicode__(self):
 		return self.title

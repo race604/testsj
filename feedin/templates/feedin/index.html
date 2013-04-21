@@ -1,0 +1,18 @@
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% if latest_added_items %}
+<table border="1">
+	<tr>
+		<th>Title</th>
+		<th>Image</th>
+	</tr>
+
+	{% for item in latest_added_items %}
+		<tr>
+			<td><a href="{{ item.url }}">{{ item.title }}</a></td>
+			<td><img src="{{ item.imgurl }}" width="80" height="80"></td>
+		</tr>
+	{% endfor %}
+
+</table>
+{% endif %}
