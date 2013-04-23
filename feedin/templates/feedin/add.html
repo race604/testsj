@@ -1,0 +1,7 @@
+{% if error_message %}<p><strong>{{ error_message }}</strong>{% endif %}
+
+<form action="{% url 'feedin:parse' %}" method="post">
+	{% csrf_token %}
+	<input type="text" name="url" size="255" /><br />
+	<input type="submit" value="Add" />
+</form>
