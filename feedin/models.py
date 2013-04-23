@@ -21,9 +21,9 @@ class Commodity(models.Model):
 	# 图片地址 
 	imgurl = models.CharField(max_length=255)
 	# 三十天销售量
-	seles = models.IntegerField(default=0)
+	sales = models.IntegerField(default=0)
 	# 评价星级
-	appraisal = models.IntegerField(default=0)
+	rate = models.IntegerField(default=0)
 
 	tags = models.ManyToManyField(Tag)
 	

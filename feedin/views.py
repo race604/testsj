@@ -20,7 +20,7 @@ def getAttribute(html, attr):
 	attr = attr + '='
 	start = html.find(attr)
 	if start >= 0:
-		start += len(attr) + 2
+		start += len(attr)+1
 		end = html.find(html[start-1], start)
 		return html[start:end]
 
@@ -37,7 +37,6 @@ def parse(request):
 		url = request.post['url']
 		item = Commodity(url=url)
 		page = urllib.urlopen(url)
-		
-		
 
 	return render(request, 'feedin/add.html')
+
