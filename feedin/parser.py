@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from HTMLParser import HTMLParser
+from decimal import Decimal
 from feedin.models import Commodity
 
 def getValueFromTag(html):
@@ -18,8 +19,18 @@ def getAttribute(html, attr):
 def findFloat(data):
 	p = re.compile('[\d.]+')
 	m = p.search(data)
-	return float(m.group())
+	if m:
+		return float(m.group())
+	else:
+		return 0.0
 
+def findInt(data):
+	p = re.compile('[\d]+')
+	m = p.search(data)
+	if m:
+		return int(m.group())
+	else:
+		return 0
 
 class TaobaoParser(HTMLParser):
 	def __init__(self):
@@ -38,6 +49,8 @@ class TaobaoParser(HTMLParser):
 		elif self.state == 1:
 			if tag == 'h3':
 				self.state = 2
+				self.item.title = ''
+				print 'state = 2'
 		# 图片 
 		elif self.state == 2:
 			if tag == 'ul':
@@ -71,17 +84,23 @@ class TaobaoParser(HTMLParser):
 				for attr in attrs:
 					if attr[0] == 'id' and attr[1] == 'J_RateStar':
 						self.state = 8
-
-	def handle_data(data):
+	
+	def handle_data(self, data):
 		if self.state == 2:
-			self.item.title += data
-		elif self.state == 3:
-			self.item.price = Decimal(data)
-		elif self.state == 4:
-			self.item.discount_price = Decimal(data.rstrip('"'))
+			print str(self.state) + ': ' + data
+			self.item.title += data.strip()
 		elif self.state == 5:
-			self.item.sales = int(data)
+			self.item.price = findFloat(data)
 		elif self.state == 6:
+			self.item.discount_price = findFloat(data.rstrip('"'))
+		elif self.state == 7:
+			self.item.sales = findInt(data)
+		elif self.state == 8:
 			self.item.rate = findFloat(data)
+
+	def reset(self):
+		HTMLParser.reset(self)
+		self.state = 0
 		
-			
+	def get_commodity(self):
+		return self.item
